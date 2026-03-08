@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARAS CONECTION · Informe General de Servicios</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6fa; --sur:#fff; --sur2:#eef1f7; --bdr:#d8dde8;
+  --navy:#0d2045; --navy2:#1a3a6b; --orange:#e8620a;
+  --red:#c0392b; --blue:#2563eb; --green:#16a34a; --yellow:#ca8a04;
+  --txt:#1e293b; --mut:#64748b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  padding:0 24px;background:var(--navy);border-bottom:3px solid var(--orange);
+  height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{background:var(--orange);width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inter',sans-serif;font-weight:900;font-size:12px;color:#fff}
+.logo-text{font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:#fff}
+.logo-text small{display:block;font-size:9px;color:rgba(255,255,255,.45);font-weight:400;letter-spacing:1px}
+.hright{display:flex;align-items:center;gap:10px}
+.badge{background:var(--orange);color:#fff;font-size:10px;font-weight:700;
+  padding:4px 12px;border-radius:20px;letter-spacing:.5px}
+.last-update{font-size:10px;color:rgba(255,255,255,.4)}
+
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:9999;gap:16px}
+#loading .spin{width:40px;height:40px;border:3px solid rgba(255,255,255,.1);
+  border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
+#loading p{color:rgba(255,255,255,.6);font-size:13px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOOLBAR */
+.toolbar{background:var(--navy2);padding:8px 24px;display:flex;align-items:center;
+  flex-wrap:wrap;gap:8px;border-bottom:1px solid rgba(255,255,255,.08)}
+.tlbl{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;margin-right:2px}
+.fsel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  color:#fff;font-family:'DM Sans',sans-serif;font-size:11px;
+  padding:5px 26px 5px 10px;border-radius:6px;cursor:pointer;appearance:none;
+  background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%228%22 height=%225%22 viewBox=%220 0 8 5%22><path d=%22M1 1l3 3 3-3%22 stroke=%22rgba(255,255,255,.4)%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/></svg>');
+  background-repeat:no-repeat;background-position:right 8px center;min-width:130px}
+.fsel:focus{outline:none;border-color:var(--orange)}
+.fsel option{background:#1a3a6b;color:#fff}
+.btn-reset{background:rgba(232,98,10,.15);border:1px solid rgba(232,98,10,.3);
+  color:var(--orange);font-size:11px;padding:5px 14px;border-radius:6px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-reset:hover{background:var(--orange);color:#fff}
+
+/* MAIN */
+main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
+.slbl{font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--mut);margin:16px 0 8px;
+  padding-left:10px;border-left:3px solid var(--orange)}
+
+/* KPIs */
+.kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kcard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;
+  padding:16px 18px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);transition:box-shadow .2s}
+.kcard:hover{box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.kicon{width:42px;height:42px;border-radius:10px;display:flex;
+  align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.klbl{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:3px}
+.kval{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1}
+.ksub{font-size:10px;color:var(--mut);margin-top:3px}
+.kg{color:var(--green)}.kr{color:var(--red)}.ko{color:var(--orange)}
+.bgg{background:#dcfce7}.bgr{background:#fee2e2}.bgo{background:#ffedd5}
+
+/* CHARTS */
+.crow{display:grid;gap:12px;margin-bottom:12px}
+.c21{grid-template-columns:2fr 1fr}
+.c111{grid-template-columns:1fr 1fr 1fr}
+.ccard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;
+  padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.ctit{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.csub{font-size:11px;color:var(--mut);margin-bottom:12px}
+.cleg{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--mut);margin-top:8px}
+.cleg span{display:flex;align-items:center;gap:4px}
+.cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* HBARS */
+.hbar-list{display:flex;flex-direction:column;gap:5px}
+.hbar-item{display:flex;align-items:center;gap:6px}
+.hbar-lbl{font-size:10px;color:var(--mut);width:128px;flex-shrink:0;
+  text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar-track{flex:1;background:var(--sur2);border-radius:3px;height:16px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:3px;display:flex;align-items:center;
+  justify-content:flex-end;padding-right:5px;transition:width .4s ease}
+.hbar-fill span{font-size:9px;font-weight:700;color:#fff}
+
+/* DONUT */
+.donut-outer{position:relative;height:190px;display:flex;align-items:center;justify-content:center}
+.donut-center{position:absolute;text-align:center;pointer-events:none}
+.donut-pct{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:var(--navy);line-height:1}
+.donut-lbl{font-size:10px;color:var(--mut);margin-top:2px}
+
+/* NO DATA */
+.no-data{display:flex;align-items:center;justify-content:center;
+  height:120px;color:var(--mut);font-size:12px;font-style:italic}
+
+@media(max-width:1100px){.c111{grid-template-columns:1fr 1fr}.c21{grid-template-columns:1fr}}
+@media(max-width:680px){main{padding:10px 12px}.kgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="spin"></div>
+  <p>Cargando datos...</p>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">AC</div>
+    <div class="logo-text">ARAS CONECTION<small>TODOS LOS VALORES SIN IVA · V11.6</small></div>
+  </div>
+  <div class="hright">
+    <span class="last-update" id="lastUpdate"></span>
+    <span class="badge">Informe General de Servicios</span>
+  </div>
+</header>
+
+<!-- FILTROS -->
+<div class="toolbar">
+  <span class="tlbl">Filtros</span>
+  <select class="fsel" id="fAnio"     onchange="filtrar()"><option value="">📅 Año: Todos</option></select>
+  <select class="fsel" id="fMes"      onchange="filtrar()"><option value="">📅 Mes: Todos</option></select>
+  <select class="fsel" id="fRegional" onchange="filtrar()"><option value="">🗺 Regional: Todas</option></select>
+  <select class="fsel" id="fCliente"  onchange="filtrar()"><option value="">👤 Cliente: Todos</option></select>
+  <select class="fsel" id="fEstado"   onchange="filtrar()"><option value="">📋 Estado: Todos</option></select>
+  <select class="fsel" id="fAfect"    onchange="filtrar()"><option value="">⚠️ Afectación: Todas</option></select>
+  <select class="fsel" id="fTaller"   onchange="filtrar()"><option value="">🔧 Taller: Todos</option></select>
+  <button class="btn-reset" onclick="resetFiltros()">✕ Limpiar</button>
+</div>
+
+<main>
+  <!-- KPIs -->
+  <div class="slbl">Resumen General</div>
+  <div class="kgrid">
+    <div class="kcard"><div class="kicon bgg">🔧</div>
+      <div><div class="klbl">Servicios Reparables</div>
+        <div class="kval kg" id="kReparables">—</div>
+        <div class="ksub">Total del período</div></div></div>
+    <div class="kcard"><div class="kicon bgr">🚫</div>
+      <div><div class="klbl">Servicios No Reparables</div>
+        <div class="kval kr" id="kNoReparables">—</div>
+        <div class="ksub">Total del período</div></div></div>
+    <div class="kcard"><div class="kicon bgo">📊</div>
+      <div><div class="klbl">Total Servicios</div>
+        <div class="kval ko" id="kTotal">—</div>
+        <div class="ksub">Reparables + No reparables</div></div></div>
+  </div>
+
+  <!-- Tendencia -->
+  <div class="slbl">Tendencia Mensual y Distribución por Afectación</div>
+  <div class="crow c21">
+    <div class="ccard">
+      <div class="ctit">Cantidad de Servicios por Mes</div>
+      <div class="csub">Comparativo anual</div>
+      <canvas id="chMes" height="95"></canvas>
+      <div class="cleg" id="legMes"></div>
+    </div>
+    <div class="ccard">
+      <div class="ctit">Por Tipo de Afectación</div>
+      <div class="csub">Distribución porcentual</div>
+      <div class="donut-outer">
+        <canvas id="chAfect" style="max-height:190px"></canvas>
+        <div class="donut-center">
+          <div class="donut-pct" id="dPct">—</div>
+          <div class="donut-lbl">Reparables</div>
+        </div>
+      </div>
+      <div class="cleg" id="legAfect" style="justify-content:center"></div>
+    </div>
+  </div>
+
+  <!-- Vehículos -->
+  <div class="slbl">Composición del Parque Vehicular</div>
+  <div class="crow c111">
+    <div class="ccard">
+      <div class="ctit">Por Marca</div><div class="csub">Top 15</div>
+      <div class="hbar-list" id="listMarca"></div>
+    </div>
+    <div class="ccard">
+      <div class="ctit">Por Tipo de Vehículo</div><div class="csub">Modelos más frecuentes</div>
+      <div class="hbar-list" id="listTipo"></div>
+    </div>
+    <div class="ccard">
+      <div class="ctit">Por Año del Vehículo</div><div class="csub">Distribución</div>
+      <div class="hbar-list" id="listModelo"></div>
+    </div>
+  </div>
+
+  <!-- Taller y Regional -->
+  <div class="slbl">Distribución por Taller y Regional</div>
+  <div class="crow c21">
+    <div class="ccard">
+      <div class="ctit">Por Taller</div><div class="csub">Top 15 por volumen</div>
+      <div class="hbar-list" id="listTaller"></div>
+    </div>
+    <div class="ccard">
+      <div class="ctit">Pareto por Regional</div><div class="csub">Volumen y % acumulado</div>
+      <canvas id="chPareto" height="175"></canvas>
+    </div>
+  </div>
+</main>
+
+<script>
+Chart.register(ChartDataLabels);
+
+// ── CONFIG ────────────────────────────────────────────────────────
+// Token de GitHub (solo lectura) — genera uno en github.com/settings/tokens
+// Permisos necesarios: repo (para repos privados)
+const GH_TOKEN = 'TU_GITHUB_TOKEN_AQUI';
+const GH_RAW   = 'https://raw.githubusercontent.com/josecuello1/haby-dashboard/main/data.json';
+
+const MESES_NOM = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const COLORS    = ['#e8620a','#2563eb','#16a34a','#ca8a04','#c0392b','#7c3aed','#0891b2'];
+
+// ── ESTADO GLOBAL ─────────────────────────────────────────────────
+let TODOS = [];       // todos los registros del JSON
+let FILTRADOS = [];   // registros después de aplicar filtros
+let charts = {};      // instancias de Chart.js
+
+// ── CARGAR DATOS ─────────────────────────────────────────────────
+async function cargarDatos() {
+  try {
+    const res = await fetch(GH_RAW, {
+      headers: { 'Authorization': `token ${GH_TOKEN}`, 'Cache-Control': 'no-cache' }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+
+    TODOS = json.registros;
+    document.getElementById('lastUpdate').textContent = `Actualizado: ${json.ultima_actualizacion}`;
+
+    poblarFiltros();
+    filtrar();
+    document.getElementById('loading').style.display = 'none';
+
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      `<p style="color:#e8334a">❌ Error cargando datos: ${e.message}</p>`;
+  }
+}
+
+// ── POBLAR FILTROS ────────────────────────────────────────────────
+function poblarFiltros() {
+  const unique = (key) => [...new Set(TODOS.map(r => r[key]).filter(Boolean))].sort();
+
+  llenarSelect('fAnio',     unique('anio'),     '📅 Año: Todos');
+  llenarSelect('fMes',      MESES_NOM.slice(1).map((_,i)=>i+1), '📅 Mes: Todos', v=>MESES_NOM[v]);
+  llenarSelect('fRegional', unique('regional'),  '🗺 Regional: Todas');
+  llenarSelect('fCliente',  unique('cliente'),   '👤 Cliente: Todos');
+  llenarSelect('fEstado',   unique('estado_seguimiento'), '📋 Estado: Todos');
+  llenarSelect('fAfect',    unique('categoria'), '⚠️ Afectación: Todas');
+  llenarSelect('fTaller',   unique('taller'),    '🔧 Taller: Todos');
+}
+
+function llenarSelect(id, vals, placeholder, labelFn=null) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = `<option value="">${placeholder}</option>` +
+    vals.map(v => `<option value="${v}">${labelFn ? labelFn(v) : v}</option>`).join('');
+}
+
+// ── FILTRAR ───────────────────────────────────────────────────────
+function filtrar() {
+  const anio     = document.getElementById('fAnio').value;
+  const mes      = document.getElementById('fMes').value;
+  const regional = document.getElementById('fRegional').value;
+  const cliente  = document.getElementById('fCliente').value;
+  const estado   = document.getElementById('fEstado').value;
+  const afect    = document.getElementById('fAfect').value;
+  const taller   = document.getElementById('fTaller').value;
+
+  FILTRADOS = TODOS.filter(r =>
+    (!anio     || String(r.anio)               === anio)     &&
+    (!mes      || String(r.mes)                === mes)      &&
+    (!regional || r.regional                   === regional) &&
+    (!cliente  || r.cliente                    === cliente)  &&
+    (!estado   || r.estado_seguimiento         === estado)   &&
+    (!afect    || r.categoria                  === afect)    &&
+    (!taller   || r.taller                     === taller)
+  );
+
+  renderTodo();
+}
+
+function resetFiltros() {
+  ['fAnio','fMes','fRegional','fCliente','fEstado','fAfect','fTaller']
+    .forEach(id => document.getElementById(id).value = '');
+  filtrar();
+}
+
+// ── RENDER PRINCIPAL ──────────────────────────────────────────────
+function renderTodo() {
+  renderKPIs();
+  renderMes();
+  renderAfectacion();
+  renderHBars('listMarca',  agrupar('marca'),         '#e8620a', 15);
+  renderHBars('listTipo',   agrupar('tipo_vehiculo'),  '#2563eb', 15);
+  renderHBars('listModelo', agruparModelo(),           '#0d2045', 15);
+  renderHBars('listTaller', agrupar('taller'),         '#e8620a', 15);
+  renderPareto();
+}
+
+// ── KPIs ──────────────────────────────────────────────────────────
+function renderKPIs() {
+  const reparables   = FILTRADOS.filter(r => r.estado_seguimiento !== 'NO REPARABLE').length;
+  const noReparables = FILTRADOS.filter(r => r.estado_seguimiento === 'NO REPARABLE').length;
+  document.getElementById('kReparables').textContent   = reparables.toLocaleString('es-CO');
+  document.getElementById('kNoReparables').textContent = noReparables.toLocaleString('es-CO');
+  document.getElementById('kTotal').textContent        = FILTRADOS.length.toLocaleString('es-CO');
+}
+
+// ── CHART: MES ────────────────────────────────────────────────────
+function renderMes() {
+  // Agrupar por año y mes
+  const byAnioMes = {};
+  FILTRADOS.forEach(r => {
+    const key = `${r.anio}-${String(r.mes).padStart(2,'0')}`;
+    byAnioMes[key] = (byAnioMes[key] || 0) + 1;
+  });
+
+  const anios = [...new Set(FILTRADOS.map(r=>r.anio))].sort();
+  const labels = MESES_NOM.slice(1);
+
+  const datasets = anios.map((anio, i) => ({
+    label: String(anio),
+    data: Array.from({length:12},(_,m) => byAnioMes[`${anio}-${String(m+1).padStart(2,'0')}`] || 0),
+    borderColor: COLORS[i],
+    backgroundColor: COLORS[i] + '15',
+    borderWidth: 2.5,
+    pointRadius: 4,
+    pointBackgroundColor: COLORS[i],
+    pointBorderColor: '#fff',
+    pointBorderWidth: 2,
+    tension: .3, fill: true
+  }));
+
+  destroyChart('chMes');
+  charts['chMes'] = new Chart(document.getElementById('chMes').getContext('2d'), {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', intersect: false },
+        datalabels: {
+          display: ctx => ctx.dataset.data[ctx.dataIndex] > 0,
+          color: ctx => ctx.dataset.borderColor,
+          font: { size: 9, weight: 'bold' },
+          anchor: 'end', align: 'top',
+          formatter: v => v > 0 ? v.toLocaleString('es-CO') : ''
+        }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } }, beginAtZero: true }
+      },
+      layout: { padding: { top: 20 } }
+    }
+  });
+
+  // Leyenda dinámica
+  document.getElementById('legMes').innerHTML = anios.map((a,i) =>
+    `<span><span class="cdot" style="background:${COLORS[i]}"></span>${a}</span>`).join('');
+}
+
+// ── CHART: AFECTACIÓN ─────────────────────────────────────────────
+function renderAfectacion() {
+  const MAP = { 'L':'Leve','M':'Media','F':'Fuerte','EF':'Extrafuerte','NR':'No Reparable' };
+  const COLS = { L:'#e8620a', M:'#2563eb', F:'#16a34a', EF:'#ca8a04', NR:'#c0392b' };
+  const conteo = {};
+  FILTRADOS.forEach(r => { conteo[r.categoria] = (conteo[r.categoria]||0) + 1; });
+
+  const labels = Object.keys(conteo).map(k => MAP[k] || k);
+  const vals   = Object.values(conteo);
+  const colors = Object.keys(conteo).map(k => COLS[k] || '#999');
+  const total  = vals.reduce((a,b)=>a+b,0);
+  const pctRep = total > 0 ? ((1 - (conteo['NR']||0)/total)*100).toFixed(1) : '0';
+
+  document.getElementById('dPct').textContent = pctRep + '%';
+
+  destroyChart('chAfect');
+  charts['chAfect'] = new Chart(document.getElementById('chAfect').getContext('2d'), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data: vals, backgroundColor: colors, borderColor: '#fff', borderWidth: 3, hoverOffset: 8 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => `${c.label}: ${c.parsed.toLocaleString('es-CO')} (${(c.parsed/total*100).toFixed(1)}%)` } },
+        datalabels: {
+          display: ctx => (ctx.dataset.data[ctx.dataIndex]/total*100) >= 2,
+          color: '#fff', font: { size: 10, weight: 'bold' },
+          formatter: (v) => `${(v/total*100).toFixed(1)}%`
+        }
+      }
+    }
+  });
+
+  document.getElementById('legAfect').innerHTML = labels.map((l,i) =>
+    `<span><span class="cdot" style="background:${colors[i]}"></span>${l} ${(vals[i]/total*100).toFixed(1)}%</span>`).join('');
+}
+
+// ── HORIZONTAL BARS ───────────────────────────────────────────────
+function agrupar(campo, top=15) {
+  const conteo = {};
+  FILTRADOS.forEach(r => { if(r[campo]) conteo[r[campo]] = (conteo[r[campo]]||0) + 1; });
+  return Object.entries(conteo)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0, top)
+    .map(([n,v]) => ({n, v}));
+}
+
+function agruparModelo(top=15) {
+  const conteo = {};
+  FILTRADOS.forEach(r => { if(r.anio_vehiculo) conteo[r.anio_vehiculo] = (conteo[r.anio_vehiculo]||0) + 1; });
+  return Object.entries(conteo)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0, top)
+    .map(([n,v]) => ({n, v}));
+}
+
+function renderHBars(id, data, color, top=15) {
+  const el = document.getElementById(id);
+  if (!data.length) { el.innerHTML = '<div class="no-data">Sin datos</div>'; return; }
+  const max = data[0].v;
+  el.innerHTML = data.map(d => `
+    <div class="hbar-item">
+      <div class="hbar-lbl" title="${d.n}">${d.n}</div>
+      <div class="hbar-track">
+        <div class="hbar-fill" style="width:${(d.v/max*100).toFixed(1)}%;background:${color}">
+          <span>${d.v.toLocaleString('es-CO')}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── PARETO REGIONAL ───────────────────────────────────────────────
+function renderPareto() {
+  const data = agrupar('regional', 20);
+  if (!data.length) return;
+
+  const tots  = data.map(d => d.v);
+  const total = tots.reduce((a,b) => a+b, 0);
+  let cum = 0;
+  const cumPct = tots.map(v => { cum += v; return +(cum/total*100).toFixed(1); });
+
+  destroyChart('chPareto');
+  charts['chPareto'] = new Chart(document.getElementById('chPareto').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.n),
+      datasets: [
+        {
+          type: 'bar', label: 'Servicios', data: tots,
+          backgroundColor: COLORS, borderRadius: 4, order: 2,
+          datalabels: { color: '#fff', font: { size: 9, weight: 'bold' }, anchor: 'center', align: 'center', formatter: v => v.toLocaleString('es-CO') }
+        },
+        {
+          type: 'line', label: '% Acum', data: cumPct,
+          borderColor: '#c0392b', borderWidth: 2.5,
+          pointBackgroundColor: '#c0392b', pointBorderColor: '#fff',
+          pointBorderWidth: 2, pointRadius: 4, tension: .3,
+          yAxisID: 'y2', order: 1,
+          datalabels: { color: '#c0392b', font: { size: 9, weight: 'bold' }, anchor: 'end', align: 'top', formatter: v => `${v}%` }
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        datalabels: {}
+      },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } }, beginAtZero: true },
+        y2: { position: 'right', min: 0, max: 100, grid: { display: false },
+          ticks: { color: '#c0392b', font: { size: 10 }, callback: v => v + '%' } }
+      },
+      layout: { padding: { top: 20 } }
+    }
+  });
+}
+
+// ── HELPER ────────────────────────────────────────────────────────
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+cargarDatos();
+</script>
+</body>
+</html>
