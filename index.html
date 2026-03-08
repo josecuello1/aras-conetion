@@ -95,9 +95,9 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 .hbar-lbl{font-size:10px;color:var(--mut);width:128px;flex-shrink:0;
   text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hbar-track{flex:1;background:var(--sur2);border-radius:3px;height:16px;overflow:hidden}
-.hbar-fill{height:100%;border-radius:3px;display:flex;align-items:center;
-  justify-content:flex-end;padding-right:5px;transition:width .4s ease}
-.hbar-fill span{font-size:9px;font-weight:700;color:#fff}
+.hbar-fill{height:100%;border-radius:3px;position:relative;}
+  transition:width .4s ease}
+.hbar-val{font-size:9px;font-weight:700;color:var(--mut);white-space:nowrap;min-width:28px;text-align:right}
 
 /* DONUT */
 .donut-outer{position:relative;height:190px;display:flex;align-items:center;justify-content:center}
@@ -188,31 +188,38 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
   </div>
 
   <!-- Vehículos -->
-  <div class="slbl">Composición del Parque Vehicular</div>
-  <div class="crow c111">
+  <div class="slbl">¿Qué marcas y tipos de vehículo ingresan?</div>
+  <div class="crow c11">
     <div class="ccard">
-      <div class="ctit">Por Marca</div><div class="csub">Top 15</div>
+      <div class="ctit">Por Marca</div><div class="csub">Volumen de servicios por fabricante</div>
       <div class="hbar-list" id="listMarca"></div>
     </div>
     <div class="ccard">
-      <div class="ctit">Por Tipo de Vehículo</div><div class="csub">Modelos más frecuentes</div>
+      <div class="ctit">Por Tipo de Vehículo</div><div class="csub">Categoría del parque atendido</div>
       <div class="hbar-list" id="listTipo"></div>
-    </div>
-    <div class="ccard">
-      <div class="ctit">Por Año del Vehículo</div><div class="csub">Distribución</div>
-      <div class="hbar-list" id="listModelo"></div>
     </div>
   </div>
 
-  <!-- Taller y Regional -->
-  <div class="slbl">Distribución por Taller y Regional</div>
+  <div class="slbl">¿Qué modelos y antigüedad tienen los vehículos?</div>
+  <div class="crow c11">
+    <div class="ccard">
+      <div class="ctit">Por Modelo</div><div class="csub">Modelos más frecuentes en taller</div>
+      <div class="hbar-list" id="listModelo"></div>
+    </div>
+    <div class="ccard">
+      <div class="ctit">Por Año del Vehículo</div><div class="csub">Antigüedad del parque atendido</div>
+      <div class="hbar-list" id="listAnio"></div>
+    </div>
+  </div>
+
+  <div class="slbl">¿Dónde y quién atiende los servicios?</div>
   <div class="crow c12">
     <div class="ccard">
-      <div class="ctit">Por Taller</div><div class="csub">Top 15 por volumen</div>
+      <div class="ctit">Por Taller</div><div class="csub">Talleres con mayor volumen</div>
       <div class="hbar-list" id="listTaller"></div>
     </div>
     <div class="ccard">
-      <div class="ctit">Pareto por Regional</div><div class="csub">Volumen y % acumulado</div>
+      <div class="ctit">Pareto por Regional</div><div class="csub">Concentración geográfica del volumen</div>
       <canvas id="chPareto" height="175"></canvas>
     </div>
   </div>
@@ -301,10 +308,11 @@ function renderTodo() {
   renderKPIs();
   renderMes();
   renderAfectacion();
-  renderHBars('listMarca',  agrupar('marca',999),       '#e8620a');
-  renderHBars('listTipo',   agrupar('tipo_vehiculo',999),'#2563eb');
-  renderHBars('listModelo', agruparModelo(999),          '#0d2045');
-  renderHBars('listTaller', agrupar('taller',999),       '#e8620a');
+  renderHBars('listMarca',  agrupar('marca',999),         '#e8620a');
+  renderHBars('listTipo',   agrupar('tipo_vehiculo',999),  '#2563eb');
+  renderHBars('listModelo', agrupar('modelo',999),         '#7c3aed');
+  renderHBars('listAnio',   agruparModelo(999),            '#0d2045');
+  renderHBars('listTaller', agrupar('taller',999),         '#e8620a');
   renderPareto();
 }
 
@@ -428,7 +436,7 @@ function agruparModelo(top=999) {
     .map(([n,v]) => ({n, v}));
 }
 
-function renderHBars(id, data, color, top=15) {
+function renderHBars(id, data, color, top=999) {
   const el = document.getElementById(id);
   if (!data.length) { el.innerHTML = '<div class="no-data">Sin datos</div>'; return; }
   const max = data[0].v;
@@ -436,10 +444,9 @@ function renderHBars(id, data, color, top=15) {
     <div class="hbar-item">
       <div class="hbar-lbl" title="${d.n}">${d.n}</div>
       <div class="hbar-track">
-        <div class="hbar-fill" style="width:${(d.v/max*100).toFixed(1)}%;background:${color}">
-          <span>${d.v.toLocaleString('es-CO')}</span>
-        </div>
+        <div class="hbar-fill" style="width:${(d.v/max*100).toFixed(1)}%;background:${color}"></div>
       </div>
+      <div class="hbar-val">${d.v.toLocaleString('es-CO')}</div>
     </div>`).join('');
 }
 
