@@ -222,30 +222,21 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 Chart.register(ChartDataLabels);
 
 // ── CONFIG ────────────────────────────────────────────────────────
-// Token de GitHub (solo lectura) — genera uno en github.com/settings/tokens
-// Permisos necesarios: repo (para repos privados)
-const GH_TOKEN = '';
-const GH_RAW   = 'https://raw.githubusercontent.com/josecuello1/haby-dashboard/main/data.json';
-
 const MESES_NOM = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const COLORS    = ['#e8620a','#2563eb','#16a34a','#ca8a04','#c0392b','#7c3aed','#0891b2'];
 
 // ── ESTADO GLOBAL ─────────────────────────────────────────────────
-let TODOS = [];       // todos los registros del JSON
-let FILTRADOS = [];   // registros después de aplicar filtros
-let charts = {};      // instancias de Chart.js
+let TODOS = [];       // todos los registros
+let FILTRADOS = [];   // registros filtrados
+let charts = {};      // instancias Chart.js
 
-// ── CARGAR DATOS ─────────────────────────────────────────────────
-async function cargarDatos() {
+// ── CARGAR DATOS desde data.js (variable global ARAS_DATA) ────────
+function cargarDatos() {
   try {
-    const res = await fetch(GH_RAW, {
-      headers: { 'Authorization': `token ${GH_TOKEN}`, 'Cache-Control': 'no-cache' }
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
+    if (typeof ARAS_DATA === 'undefined') throw new Error('data.js no cargado');
 
-    TODOS = json.registros;
-    document.getElementById('lastUpdate').textContent = `Actualizado: ${json.ultima_actualizacion}`;
+    TODOS = ARAS_DATA.registros;
+    document.getElementById('lastUpdate').textContent = `Actualizado: ${ARAS_DATA.ultima_actualizacion}`;
 
     poblarFiltros();
     filtrar();
@@ -506,7 +497,8 @@ function destroyChart(id) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
-cargarDatos();
+// cargarDatos se llama desde data.js al terminar de cargar
 </script>
+<script src="data.js" onload="cargarDatos()" onerror="document.getElementById('loading').innerHTML='<p style=color:#e8334a>❌ Error: no se pudo cargar data.js</p>'"></script>
 </body>
 </html>
