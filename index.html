@@ -79,7 +79,7 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 
 /* CHARTS */
 .crow{display:grid;gap:12px;margin-bottom:12px}
-.c21{grid-template-columns:2fr 1fr}
+.c21{grid-template-columns:2fr 1fr}.c12{grid-template-columns:1fr 2fr}
 .c111{grid-template-columns:1fr 1fr 1fr}
 .ccard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;
   padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
@@ -90,7 +90,7 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 .cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
 /* HBARS */
-.hbar-list{display:flex;flex-direction:column;gap:5px}
+.hbar-list{display:flex;flex-direction:column;gap:5px;max-height:380px;overflow-y:auto;padding-right:4px}.hbar-list::-webkit-scrollbar{width:4px}.hbar-list::-webkit-scrollbar-track{background:var(--sur2);border-radius:2px}.hbar-list::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
 .hbar-item{display:flex;align-items:center;gap:6px}
 .hbar-lbl{font-size:10px;color:var(--mut);width:128px;flex-shrink:0;
   text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -206,7 +206,7 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 
   <!-- Taller y Regional -->
   <div class="slbl">Distribución por Taller y Regional</div>
-  <div class="crow c21">
+  <div class="crow c12">
     <div class="ccard">
       <div class="ctit">Por Taller</div><div class="csub">Top 15 por volumen</div>
       <div class="hbar-list" id="listTaller"></div>
@@ -301,10 +301,10 @@ function renderTodo() {
   renderKPIs();
   renderMes();
   renderAfectacion();
-  renderHBars('listMarca',  agrupar('marca'),         '#e8620a', 15);
-  renderHBars('listTipo',   agrupar('tipo_vehiculo'),  '#2563eb', 15);
-  renderHBars('listModelo', agruparModelo(),           '#0d2045', 15);
-  renderHBars('listTaller', agrupar('taller'),         '#e8620a', 15);
+  renderHBars('listMarca',  agrupar('marca',999),       '#e8620a');
+  renderHBars('listTipo',   agrupar('tipo_vehiculo',999),'#2563eb');
+  renderHBars('listModelo', agruparModelo(999),          '#0d2045');
+  renderHBars('listTaller', agrupar('taller',999),       '#e8620a');
   renderPareto();
 }
 
@@ -410,7 +410,7 @@ function renderAfectacion() {
 }
 
 // ── HORIZONTAL BARS ───────────────────────────────────────────────
-function agrupar(campo, top=15) {
+function agrupar(campo, top=999) {
   const conteo = {};
   FILTRADOS.forEach(r => { if(r[campo]) conteo[r[campo]] = (conteo[r[campo]]||0) + 1; });
   return Object.entries(conteo)
@@ -419,7 +419,7 @@ function agrupar(campo, top=15) {
     .map(([n,v]) => ({n, v}));
 }
 
-function agruparModelo(top=15) {
+function agruparModelo(top=999) {
   const conteo = {};
   FILTRADOS.forEach(r => { if(r.anio_vehiculo) conteo[r.anio_vehiculo] = (conteo[r.anio_vehiculo]||0) + 1; });
   return Object.entries(conteo)
