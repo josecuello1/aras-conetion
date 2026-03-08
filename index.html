@@ -80,7 +80,7 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 /* CHARTS */
 .crow{display:grid;gap:12px;margin-bottom:12px}
 .c21{grid-template-columns:2fr 1fr}.c12{grid-template-columns:1fr 2fr}
-.c111{grid-template-columns:1fr 1fr 1fr}
+.c111{grid-template-columns:1fr 1fr 1fr}.cgrid22{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .ccard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;
   padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .ctit{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px}
@@ -90,7 +90,7 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 .cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
 /* HBARS */
-.hbar-list{display:flex;flex-direction:column;gap:5px;max-height:380px;overflow-y:auto;padding-right:4px}.hbar-list::-webkit-scrollbar{width:4px}.hbar-list::-webkit-scrollbar-track{background:var(--sur2);border-radius:2px}.hbar-list::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
+.hbar-list{display:flex;flex-direction:column;gap:5px;max-height:260px;overflow-y:auto;padding-right:4px}.hbar-list::-webkit-scrollbar{width:4px}.hbar-list::-webkit-scrollbar-track{background:var(--sur2);border-radius:2px}.hbar-list::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
 .hbar-item{display:flex;align-items:center;gap:6px}
 .hbar-lbl{font-size:10px;color:var(--mut);width:128px;flex-shrink:0;
   text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -188,26 +188,22 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
   </div>
 
   <!-- Vehículos -->
-  <div class="slbl">¿Qué marcas y tipos de vehículo ingresan?</div>
-  <div class="crow c11">
+  <div class="slbl">Composición del Parque Vehicular</div>
+  <div class="cgrid22">
     <div class="ccard">
-      <div class="ctit">Por Marca</div><div class="csub">Volumen de servicios por fabricante</div>
+      <div class="ctit">Por Marca</div><div class="csub">Volumen por fabricante</div>
       <div class="hbar-list" id="listMarca"></div>
     </div>
     <div class="ccard">
       <div class="ctit">Por Tipo de Vehículo</div><div class="csub">Categoría del parque atendido</div>
       <div class="hbar-list" id="listTipo"></div>
     </div>
-  </div>
-
-  <div class="slbl">¿Qué modelos y antigüedad tienen los vehículos?</div>
-  <div class="crow c11">
     <div class="ccard">
-      <div class="ctit">Por Modelo</div><div class="csub">Modelos más frecuentes en taller</div>
+      <div class="ctit">Por Modelo</div><div class="csub">Modelos más frecuentes</div>
       <div class="hbar-list" id="listModelo"></div>
     </div>
     <div class="ccard">
-      <div class="ctit">Por Año del Vehículo</div><div class="csub">Antigüedad del parque atendido</div>
+      <div class="ctit">Por Año del Vehículo</div><div class="csub">Antigüedad del parque</div>
       <div class="hbar-list" id="listAnio"></div>
     </div>
   </div>
