@@ -214,11 +214,11 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
   <div class="crow c12" style="align-items:start">
     <div class="ccard">
       <div class="ctit">Por Taller</div><div class="csub">Talleres con mayor volumen</div>
-      <div class="hbar-list" style="max-height:260px" id="listTaller"></div>
+      <div class="hbar-list" style="max-height:200px" id="listTaller"></div>
     </div>
     <div class="ccard">
       <div class="ctit">Pareto por Regional</div><div class="csub">Concentración geográfica del volumen</div>
-      <canvas id="chPareto" height="260"></canvas>
+      <canvas id="chPareto" style="max-height:260px;height:260px!important"></canvas>
     </div>
   </div>
 </main>
@@ -481,6 +481,7 @@ function renderPareto() {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         datalabels: {}
