@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ARAS CONECTION · Informe General de Servicios</title>
+<title>ARAS CONECTION · Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -22,27 +22,23 @@ header{display:flex;align-items:center;justify-content:space-between;flex-wrap:w
   padding:0 24px;background:var(--navy);border-bottom:3px solid #ffffff;
   height:72px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
 .logo{display:flex;align-items:center;gap:12px}
-.logo-icon{background:var(--orange);width:36px;height:36px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Inter',sans-serif;font-weight:900;font-size:12px;color:#fff}
 .logo-text{font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:#93c5fd}
 .logo-text small{display:block;font-size:9px;color:#93c5fd;font-weight:400;letter-spacing:1px}
 .hright{display:flex;align-items:center;gap:10px}
-.badge{background:var(--orange);color:#fff;font-size:10px;font-weight:700;
-  padding:4px 12px;border-radius:20px;letter-spacing:.5px}
 .last-update{font-size:10px;color:#93c5fd}
 
-/* LOADING */
-#loading{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;z-index:9999;gap:16px}
-#loading .spin{width:40px;height:40px;border:3px solid rgba(255,255,255,.1);
-  border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
-#loading p{color:rgba(255,255,255,.6);font-size:13px}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* TABS */
+.tabs{background:var(--navy2);padding:0 24px;display:flex;align-items:center;gap:4px;
+  border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto}
+.tab{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.5);
+  padding:10px 16px;cursor:pointer;border-bottom:3px solid transparent;
+  white-space:nowrap;transition:all .2s;letter-spacing:.3px}
+.tab:hover{color:rgba(255,255,255,.8)}
+.tab.active{color:#fff;border-bottom-color:var(--orange)}
 
 /* TOOLBAR */
 .toolbar{background:var(--navy2);padding:8px 24px;display:flex;align-items:center;
-  flex-wrap:wrap;gap:8px;border-bottom:1px solid rgba(255,255,255,.08)}
+  flex-wrap:wrap;gap:8px;border-bottom:1px solid rgba(255,255,255,.05)}
 .tlbl{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;
   letter-spacing:1px;text-transform:uppercase;margin-right:2px}
 .fsel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
@@ -57,14 +53,25 @@ header{display:flex;align-items:center;justify-content:space-between;flex-wrap:w
   font-family:'DM Sans',sans-serif;transition:all .2s}
 .btn-reset:hover{background:var(--orange);color:#fff}
 
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:9999;gap:16px}
+#loading .spin{width:40px;height:40px;border:3px solid rgba(255,255,255,.1);
+  border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite}
+#loading p{color:rgba(255,255,255,.6);font-size:13px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 /* MAIN */
 main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
+.page{display:none}.page.active{display:block}
 .slbl{font-family:'Inter',sans-serif;font-size:9px;font-weight:700;letter-spacing:2.5px;
   text-transform:uppercase;color:var(--mut);margin:16px 0 8px;
   padding-left:10px;border-left:3px solid var(--orange)}
 
 /* KPIs */
-.kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kgrid{display:grid;gap:10px}
+.kgrid.k3{grid-template-columns:repeat(3,1fr)}
+.kgrid.k4{grid-template-columns:repeat(4,1fr)}
 .kcard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;
   padding:16px 18px;display:flex;align-items:center;gap:12px;
   box-shadow:0 1px 4px rgba(0,0,0,.05);transition:box-shadow .2s}
@@ -74,13 +81,15 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 .klbl{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:3px}
 .kval{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1}
 .ksub{font-size:10px;color:var(--mut);margin-top:3px}
-.kg{color:var(--green)}.kr{color:var(--red)}.ko{color:var(--orange)}
-.bgg{background:#dcfce7}.bgr{background:#fee2e2}.bgo{background:#ffedd5}
+.kg{color:var(--green)}.kr{color:var(--red)}.ko{color:var(--orange)}.kb{color:var(--blue)}.ky{color:var(--yellow)}
+.bgg{background:#dcfce7}.bgr{background:#fee2e2}.bgo{background:#ffedd5}.bgb{background:#dbeafe}.bgy{background:#fef9c3}
 
 /* CHARTS */
 .crow{display:grid;gap:12px;margin-bottom:12px}
 .c21{grid-template-columns:2fr 1fr}.c12{grid-template-columns:1fr 2fr}
-.c111{grid-template-columns:1fr 1fr 1fr}.cgrid22{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}.cgrid22 .ccard{display:flex;flex-direction:column}.cgrid22 .hbar-list{flex:1;max-height:180px}
+.c11{grid-template-columns:1fr 1fr}.c111{grid-template-columns:1fr 1fr 1fr}
+.cgrid22{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.cgrid22 .ccard{display:flex;flex-direction:column}.cgrid22 .hbar-list{flex:1;max-height:180px}
 .ccard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;
   padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .ctit{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px}
@@ -90,13 +99,14 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 .cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
 /* HBARS */
-.hbar-list{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto;padding-right:4px}.hbar-list::-webkit-scrollbar{width:4px}.hbar-list::-webkit-scrollbar-track{background:var(--sur2);border-radius:2px}.hbar-list::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
+.hbar-list{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto;padding-right:4px}
+.hbar-list::-webkit-scrollbar{width:4px}.hbar-list::-webkit-scrollbar-track{background:var(--sur2);border-radius:2px}
+.hbar-list::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
 .hbar-item{display:flex;align-items:center;gap:6px}
 .hbar-lbl{font-size:9px;color:var(--mut);width:110px;flex-shrink:0;
   text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hbar-track{flex:1;background:var(--sur2);border-radius:3px;height:13px;overflow:hidden}
-.hbar-fill{height:100%;border-radius:3px;position:relative;}
-  transition:width .4s ease}
+.hbar-fill{height:100%;border-radius:3px;}
 .hbar-val{font-size:8px;font-weight:600;color:var(--mut);white-space:nowrap;min-width:24px;text-align:right}
 
 /* DONUT */
@@ -105,35 +115,45 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 .donut-pct{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:var(--navy);line-height:1}
 .donut-lbl{font-size:10px;color:var(--mut);margin-top:2px}
 
+/* TABLE */
+.dtbl{width:100%;border-collapse:collapse;font-size:11px}
+.dtbl th{background:var(--sur2);color:var(--mut);font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;font-size:9px;padding:8px 10px;text-align:left;border-bottom:2px solid var(--bdr)}
+.dtbl td{padding:7px 10px;border-bottom:1px solid var(--sur2);color:var(--txt)}
+.dtbl tr:hover td{background:#f8fafc}
+.dtbl td.num{text-align:right;font-family:'Inter',sans-serif;font-weight:600}
+.dtbl td.cop{text-align:right;font-family:'Inter',sans-serif;font-weight:600;color:var(--green)}
+
 /* NO DATA */
 .no-data{display:flex;align-items:center;justify-content:center;
   height:120px;color:var(--mut);font-size:12px;font-style:italic}
 
-@media(max-width:1100px){.c111{grid-template-columns:1fr 1fr}.c21{grid-template-columns:1fr}}
-@media(max-width:680px){main{padding:10px 12px}.kgrid{grid-template-columns:1fr}}
+@media(max-width:1100px){.c111{grid-template-columns:1fr 1fr}.c21{grid-template-columns:1fr}.cgrid22{grid-template-columns:1fr}}
+@media(max-width:680px){main{padding:10px 12px}.kgrid.k3,.kgrid.k4{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loading">
-  <div class="spin"></div>
-  <p>Cargando datos...</p>
-</div>
+<div id="loading"><div class="spin"></div><p>Cargando datos...</p></div>
 
 <!-- HEADER -->
 <header>
   <div class="logo">
-    <div class="logo-icon" style="background:#fff;padding:6px 10px;border-radius:8px;width:auto;height:auto">
+    <div style="background:#fff;padding:6px 10px;border-radius:8px;">
       <img src="data:image/png;base64,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" style="height:54px;width:auto;display:block" alt="ARAS CONECTION">
     </div>
     <div class="logo-text">ARAS CONECTION<small>TODOS LOS VALORES SIN IVA · V11.6</small></div>
   </div>
   <div class="hright">
     <span class="last-update" id="lastUpdate"></span>
-    <span class="badge">Informe General de Servicios</span>
   </div>
 </header>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="cambiarPagina(1)">📊 Informe General</div>
+  <div class="tab" onclick="cambiarPagina(2)">💰 Costos en Proceso</div>
+</div>
 
 <!-- FILTROS -->
 <div class="toolbar">
@@ -149,9 +169,14 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
 </div>
 
 <main>
-  <!-- KPIs -->
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- PÁGINA 1 — Informe General                                    -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="page active" id="pag1">
+
   <div class="slbl">Resumen General</div>
-  <div class="kgrid">
+  <div class="kgrid k3">
     <div class="kcard"><div class="kicon bgg">🔧</div>
       <div><div class="klbl">Servicios Reparables</div>
         <div class="kval kg" id="kReparables">—</div>
@@ -166,7 +191,6 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
         <div class="ksub">Reparables + No reparables</div></div></div>
   </div>
 
-  <!-- Tendencia -->
   <div class="slbl">Tendencia Mensual y Distribución por Afectación</div>
   <div class="crow c21">
     <div class="ccard">
@@ -189,7 +213,6 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
     </div>
   </div>
 
-  <!-- Vehículos -->
   <div class="slbl">Composición del Parque Vehicular</div>
   <div class="cgrid22">
     <div class="ccard">
@@ -221,289 +244,401 @@ main{padding:14px 22px 32px;max-width:1600px;margin:0 auto}
       <canvas id="chPareto" style="max-height:300px;height:300px!important"></canvas>
     </div>
   </div>
+
+</div><!-- /pag1 -->
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- PÁGINA 2 — Costos en Proceso                                  -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="page" id="pag2">
+
+  <div class="slbl">¿Cuánto cuesta el backlog actual?</div>
+  <div class="kgrid k4">
+    <div class="kcard"><div class="kicon bgo">🔧</div>
+      <div><div class="klbl">Servicios en Proceso</div>
+        <div class="kval ko" id="p2kRep">—</div>
+        <div class="ksub">Reparables activos</div></div></div>
+    <div class="kcard"><div class="kicon bgr">🚫</div>
+      <div><div class="klbl">No Reparables</div>
+        <div class="kval kr" id="p2kNR">—</div>
+        <div class="ksub">En proceso</div></div></div>
+    <div class="kcard"><div class="kicon bgb">💰</div>
+      <div><div class="klbl">Costo Total Proceso</div>
+        <div class="kval kb" id="p2kCT">—</div>
+        <div class="ksub">Sin IVA</div></div></div>
+    <div class="kcard"><div class="kicon bgy">📐</div>
+      <div><div class="klbl">Costo Promedio</div>
+        <div class="kval ky" id="p2kCP">—</div>
+        <div class="ksub">Por servicio</div></div></div>
+  </div>
+
+  <div class="slbl">¿Cómo evoluciona el backlog en el tiempo?</div>
+  <div class="crow">
+    <div class="ccard">
+      <div class="ctit">Servicios en Proceso por Mes</div>
+      <div class="csub">Comparativo anual — servicios aún no terminados</div>
+      <canvas id="chP2Mes" height="80"></canvas>
+      <div class="cleg" id="legP2Mes"></div>
+    </div>
+  </div>
+
+  <div class="slbl">¿Cuánto cuesta por afectación y regional?</div>
+  <div class="crow c11">
+    <div class="ccard">
+      <div class="ctit">Costo Promedio por Afectación</div>
+      <div class="csub">Costo promedio sin IVA por nivel de daño</div>
+      <canvas id="chP2Afect" height="140"></canvas>
+    </div>
+    <div class="ccard">
+      <div class="ctit">Costo Total por Regional</div>
+      <div class="csub">Distribución del gasto por zona geográfica</div>
+      <canvas id="chP2Reg" height="140"></canvas>
+    </div>
+  </div>
+
+  <div class="slbl">¿Quiénes son los clientes con mayor exposición?</div>
+  <div class="ccard">
+    <div class="ctit">Top Clientes en Proceso</div>
+    <div class="csub">Servicios activos y costo total por cliente</div>
+    <div style="overflow-x:auto">
+      <table class="dtbl" id="tbCli2">
+        <thead><tr>
+          <th>Cliente</th><th>Servicios</th><th>Costo Total</th><th>Costo Promedio</th><th>No Reparables</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /pag2 -->
+
 </main>
 
 <script>
 Chart.register(ChartDataLabels);
 
-// ── CONFIG ────────────────────────────────────────────────────────
 const MESES_NOM = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const COLORS    = ['#e8620a','#2563eb','#16a34a','#ca8a04','#c0392b','#7c3aed','#0891b2'];
+const MAP_AF    = { 'L':'Leve','M':'Media','F':'Fuerte','EF':'Extrafuerte','NR':'No Reparable' };
+const COLS_AF   = { L:'#e8620a', M:'#2563eb', F:'#16a34a', EF:'#ca8a04', NR:'#c0392b' };
 
-// ── ESTADO GLOBAL ─────────────────────────────────────────────────
-let TODOS = [];       // todos los registros
-let FILTRADOS = [];   // registros filtrados
-let charts = {};      // instancias Chart.js
+let TODOS = [], FILTRADOS = [], charts = {}, tabActual = 1;
 
-// ── CARGAR DATOS desde data.js (variable global ARAS_DATA) ────────
+// ── TABS ──────────────────────────────────────────────────────────
+function cambiarPagina(n) {
+  tabActual = n;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n-1));
+  document.querySelectorAll('.page').forEach((p,i) => p.classList.toggle('active', i===n-1));
+  renderPagina();
+}
+
+// ── CARGAR ────────────────────────────────────────────────────────
 function cargarDatos() {
   try {
     if (typeof ARAS_DATA === 'undefined') throw new Error('data.js no cargado');
-
     TODOS = ARAS_DATA.registros;
     document.getElementById('lastUpdate').textContent = `Actualizado: ${ARAS_DATA.ultima_actualizacion}`;
-
     poblarFiltros();
     filtrar();
     document.getElementById('loading').style.display = 'none';
-
-  } catch (e) {
-    document.getElementById('loading').innerHTML =
-      `<p style="color:#e8334a">❌ Error cargando datos: ${e.message}</p>`;
+  } catch(e) {
+    document.getElementById('loading').innerHTML = `<p style="color:#e8334a">❌ Error: ${e.message}</p>`;
   }
 }
 
-// ── POBLAR FILTROS ────────────────────────────────────────────────
+// ── FILTROS ───────────────────────────────────────────────────────
 function poblarFiltros() {
-  const unique = (key) => [...new Set(TODOS.map(r => r[key]).filter(Boolean))].sort();
-
+  const unique = k => [...new Set(TODOS.map(r=>r[k]).filter(Boolean))].sort();
   llenarSelect('fAnio',     unique('anio'),     '📅 Año: Todos');
   llenarSelect('fMes',      MESES_NOM.slice(1).map((_,i)=>i+1), '📅 Mes: Todos', v=>MESES_NOM[v]);
-  llenarSelect('fRegional', unique('regional'),  '🗺 Regional: Todas');
-  llenarSelect('fCliente',  unique('cliente'),   '👤 Cliente: Todos');
+  llenarSelect('fRegional', unique('regional'), '🗺 Regional: Todas');
+  llenarSelect('fCliente',  unique('cliente'),  '👤 Cliente: Todos');
   llenarSelect('fEstado',   unique('estado_seguimiento'), '📋 Estado: Todos');
-  llenarSelect('fAfect',    unique('categoria'), '⚠️ Afectación: Todas');
-  llenarSelect('fTaller',   unique('taller'),    '🔧 Taller: Todos');
+  llenarSelect('fAfect',    unique('categoria'),'⚠️ Afectación: Todas');
+  llenarSelect('fTaller',   unique('taller'),   '🔧 Taller: Todos');
 }
-
-function llenarSelect(id, vals, placeholder, labelFn=null) {
-  const sel = document.getElementById(id);
-  sel.innerHTML = `<option value="">${placeholder}</option>` +
-    vals.map(v => `<option value="${v}">${labelFn ? labelFn(v) : v}</option>`).join('');
+function llenarSelect(id, vals, ph, labelFn=null) {
+  document.getElementById(id).innerHTML = `<option value="">${ph}</option>` +
+    vals.map(v=>`<option value="${v}">${labelFn?labelFn(v):v}</option>`).join('');
 }
-
-// ── FILTRAR ───────────────────────────────────────────────────────
 function filtrar() {
-  const anio     = document.getElementById('fAnio').value;
-  const mes      = document.getElementById('fMes').value;
-  const regional = document.getElementById('fRegional').value;
-  const cliente  = document.getElementById('fCliente').value;
-  const estado   = document.getElementById('fEstado').value;
-  const afect    = document.getElementById('fAfect').value;
-  const taller   = document.getElementById('fTaller').value;
-
+  const v = id => document.getElementById(id).value;
   FILTRADOS = TODOS.filter(r =>
-    (!anio     || String(r.anio)               === anio)     &&
-    (!mes      || String(r.mes)                === mes)      &&
-    (!regional || r.regional                   === regional) &&
-    (!cliente  || r.cliente                    === cliente)  &&
-    (!estado   || r.estado_seguimiento         === estado)   &&
-    (!afect    || r.categoria                  === afect)    &&
-    (!taller   || r.taller                     === taller)
+    (!v('fAnio')     || String(r.anio)===v('fAnio')) &&
+    (!v('fMes')      || String(r.mes)===v('fMes')) &&
+    (!v('fRegional') || r.regional===v('fRegional')) &&
+    (!v('fCliente')  || r.cliente===v('fCliente')) &&
+    (!v('fEstado')   || r.estado_seguimiento===v('fEstado')) &&
+    (!v('fAfect')    || r.categoria===v('fAfect')) &&
+    (!v('fTaller')   || r.taller===v('fTaller'))
   );
-
-  renderTodo();
+  renderPagina();
 }
-
 function resetFiltros() {
-  ['fAnio','fMes','fRegional','fCliente','fEstado','fAfect','fTaller']
-    .forEach(id => document.getElementById(id).value = '');
+  ['fAnio','fMes','fRegional','fCliente','fEstado','fAfect','fTaller'].forEach(id=>document.getElementById(id).value='');
   filtrar();
 }
 
-// ── RENDER PRINCIPAL ──────────────────────────────────────────────
-function renderTodo() {
-  renderKPIs();
+// ── RENDER ROUTER ─────────────────────────────────────────────────
+function renderPagina() {
+  if (tabActual===1) renderP1();
+  if (tabActual===2) renderP2();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// PÁGINA 1
+// ══════════════════════════════════════════════════════════════════
+function renderP1() {
+  // KPIs
+  const rep = FILTRADOS.filter(r=>r.estado_seguimiento!=='NO REPARABLE').length;
+  const nr  = FILTRADOS.filter(r=>r.estado_seguimiento==='NO REPARABLE').length;
+  document.getElementById('kReparables').textContent   = rep.toLocaleString('es-CO');
+  document.getElementById('kNoReparables').textContent = nr.toLocaleString('es-CO');
+  document.getElementById('kTotal').textContent        = FILTRADOS.length.toLocaleString('es-CO');
+
   renderMes();
   renderAfectacion();
-  renderHBars('listMarca',  agrupar('marca',999),          '#e8620a');
-  renderHBars('listTipo',   agrupar('tipo_vehiculo',999),   '#2563eb');
-  renderHBars('listModelo', agrupar('modelo',999),          '#7c3aed');
-  renderHBars('listAnio',   agruparModelo(999),             '#0d2045');
-  renderHBars('listTaller', agrupar('taller',999),          '#e8620a');
+  renderHBars('listMarca',  agrupar('marca',999),        '#e8620a');
+  renderHBars('listTipo',   agrupar('tipo_vehiculo',999), '#2563eb');
+  renderHBars('listModelo', agrupar('modelo',999),        '#7c3aed');
+  renderHBars('listAnio',   agruparAnio(999),             '#0d2045');
+  renderHBars('listTaller', agrupar('taller',999),        '#e8620a');
   renderPareto();
 }
 
-// ── KPIs ──────────────────────────────────────────────────────────
-function renderKPIs() {
-  const reparables   = FILTRADOS.filter(r => r.estado_seguimiento !== 'NO REPARABLE').length;
-  const noReparables = FILTRADOS.filter(r => r.estado_seguimiento === 'NO REPARABLE').length;
-  document.getElementById('kReparables').textContent   = reparables.toLocaleString('es-CO');
-  document.getElementById('kNoReparables').textContent = noReparables.toLocaleString('es-CO');
-  document.getElementById('kTotal').textContent        = FILTRADOS.length.toLocaleString('es-CO');
-}
-
-// ── CHART: MES ────────────────────────────────────────────────────
 function renderMes() {
-  // Agrupar por año y mes
   const byAnioMes = {};
   FILTRADOS.forEach(r => {
     const key = `${r.anio}-${String(r.mes).padStart(2,'0')}`;
-    byAnioMes[key] = (byAnioMes[key] || 0) + 1;
+    byAnioMes[key] = (byAnioMes[key]||0)+1;
   });
-
   const anios = [...new Set(FILTRADOS.map(r=>r.anio))].sort();
-  const labels = MESES_NOM.slice(1);
-
-  const datasets = anios.map((anio, i) => ({
+  const datasets = anios.map((anio,i) => ({
     label: String(anio),
-    data: Array.from({length:12},(_,m) => byAnioMes[`${anio}-${String(m+1).padStart(2,'0')}`] || 0),
-    borderColor: COLORS[i],
-    backgroundColor: COLORS[i] + '15',
-    borderWidth: 2.5,
-    pointRadius: 4,
-    pointBackgroundColor: COLORS[i],
-    pointBorderColor: '#fff',
-    pointBorderWidth: 2,
-    tension: .3, fill: true
+    data: Array.from({length:12},(_,m)=>byAnioMes[`${anio}-${String(m+1).padStart(2,'0')}`]||0),
+    borderColor:COLORS[i], backgroundColor:COLORS[i]+'15',
+    borderWidth:2.5, pointRadius:4, pointBackgroundColor:COLORS[i],
+    pointBorderColor:'#fff', pointBorderWidth:2, tension:.3, fill:true
   }));
-
-  destroyChart('chMes');
-  charts['chMes'] = new Chart(document.getElementById('chMes').getContext('2d'), {
-    type: 'line',
-    data: { labels, datasets },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { mode: 'index', intersect: false },
-        datalabels: {
-          display: ctx => ctx.dataset.data[ctx.dataIndex] > 0,
-          color: ctx => ctx.dataset.borderColor,
-          font: { size: 9, weight: 'bold' },
-          anchor: 'end', align: 'top',
-          formatter: v => v > 0 ? v.toLocaleString('es-CO') : ''
-        }
-      },
-      scales: {
-        x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
-        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } }, beginAtZero: true }
-      },
-      layout: { padding: { top: 20 } }
-    }
+  dc('chMes');
+  charts['chMes'] = new Chart(document.getElementById('chMes').getContext('2d'),{
+    type:'line', data:{labels:MESES_NOM.slice(1), datasets},
+    options:{responsive:true, plugins:{legend:{display:false},
+      tooltip:{mode:'index',intersect:false},
+      datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>0,
+        color:ctx=>ctx.dataset.borderColor, font:{size:9,weight:'bold'},
+        anchor:'end', align:'top', formatter:v=>v>0?v.toLocaleString('es-CO'):''}},
+      scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}}},
+        y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}},beginAtZero:true}},
+      layout:{padding:{top:20}}}
   });
-
-  // Leyenda dinámica
-  document.getElementById('legMes').innerHTML = anios.map((a,i) =>
+  document.getElementById('legMes').innerHTML = anios.map((a,i)=>
     `<span><span class="cdot" style="background:${COLORS[i]}"></span>${a}</span>`).join('');
 }
 
-// ── CHART: AFECTACIÓN ─────────────────────────────────────────────
 function renderAfectacion() {
-  const MAP = { 'L':'Leve','M':'Media','F':'Fuerte','EF':'Extrafuerte','NR':'No Reparable' };
-  const COLS = { L:'#e8620a', M:'#2563eb', F:'#16a34a', EF:'#ca8a04', NR:'#c0392b' };
   const conteo = {};
-  FILTRADOS.forEach(r => { conteo[r.categoria] = (conteo[r.categoria]||0) + 1; });
-
-  const labels = Object.keys(conteo).map(k => MAP[k] || k);
+  FILTRADOS.forEach(r=>{conteo[r.categoria]=(conteo[r.categoria]||0)+1;});
+  const labels = Object.keys(conteo).map(k=>MAP_AF[k]||k);
   const vals   = Object.values(conteo);
-  const colors = Object.keys(conteo).map(k => COLS[k] || '#999');
+  const colors = Object.keys(conteo).map(k=>COLS_AF[k]||'#999');
   const total  = vals.reduce((a,b)=>a+b,0);
-  const pctRep = total > 0 ? ((1 - (conteo['NR']||0)/total)*100).toFixed(1) : '0';
-
-  document.getElementById('dPct').textContent = pctRep + '%';
-
-  destroyChart('chAfect');
-  charts['chAfect'] = new Chart(document.getElementById('chAfect').getContext('2d'), {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data: vals, backgroundColor: colors, borderColor: '#fff', borderWidth: 3, hoverOffset: 8 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '65%',
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: c => `${c.label}: ${c.parsed.toLocaleString('es-CO')} (${(c.parsed/total*100).toFixed(1)}%)` } },
-        datalabels: {
-          display: ctx => (ctx.dataset.data[ctx.dataIndex]/total*100) >= 2,
-          color: '#fff', font: { size: 10, weight: 'bold' },
-          formatter: (v) => `${(v/total*100).toFixed(1)}%`
-        }
-      }
-    }
+  const pctRep = total>0?((1-(conteo['NR']||0)/total)*100).toFixed(1):'0';
+  document.getElementById('dPct').textContent = pctRep+'%';
+  dc('chAfect');
+  charts['chAfect'] = new Chart(document.getElementById('chAfect').getContext('2d'),{
+    type:'doughnut',
+    data:{labels, datasets:[{data:vals,backgroundColor:colors,borderColor:'#fff',borderWidth:3,hoverOffset:8}]},
+    options:{responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed.toLocaleString('es-CO')} (${(c.parsed/total*100).toFixed(1)}%)`}},
+        datalabels:{display:ctx=>(ctx.dataset.data[ctx.dataIndex]/total*100)>=2,
+          color:'#fff', font:{size:10,weight:'bold'}, formatter:v=>`${(v/total*100).toFixed(1)}%`}}}
   });
-
-  document.getElementById('legAfect').innerHTML = labels.map((l,i) =>
+  document.getElementById('legAfect').innerHTML = labels.map((l,i)=>
     `<span><span class="cdot" style="background:${colors[i]}"></span>${l} ${(vals[i]/total*100).toFixed(1)}%</span>`).join('');
 }
 
-// ── HORIZONTAL BARS ───────────────────────────────────────────────
-function agrupar(campo, top=999) {
-  const conteo = {};
-  FILTRADOS.forEach(r => { if(r[campo]) conteo[r[campo]] = (conteo[r[campo]]||0) + 1; });
-  return Object.entries(conteo)
-    .sort((a,b) => b[1]-a[1])
-    .slice(0, top)
-    .map(([n,v]) => ({n, v}));
-}
-
-function agruparModelo(top=999) {
-  const conteo = {};
-  FILTRADOS.forEach(r => { if(r.anio_vehiculo) conteo[r.anio_vehiculo] = (conteo[r.anio_vehiculo]||0) + 1; });
-  return Object.entries(conteo)
-    .sort((a,b) => b[1]-a[1])
-    .slice(0, top)
-    .map(([n,v]) => ({n, v}));
-}
-
-function renderHBars(id, data, color, top=999) {
-  const el = document.getElementById(id);
-  if (!data.length) { el.innerHTML = '<div class="no-data">Sin datos</div>'; return; }
-  const max = data[0].v;
-  el.innerHTML = data.map(d => `
-    <div class="hbar-item">
-      <div class="hbar-lbl" title="${d.n}">${d.n}</div>
-      <div class="hbar-track">
-        <div class="hbar-fill" style="width:${(d.v/max*100).toFixed(1)}%;background:${color}"></div>
-      </div>
-      <div class="hbar-val">${d.v.toLocaleString('es-CO')}</div>
-    </div>`).join('');
-}
-
-// ── PARETO REGIONAL ───────────────────────────────────────────────
 function renderPareto() {
-  const data = agrupar('regional', 20);
-  if (!data.length) return;
-
-  const tots  = data.map(d => d.v);
-  const total = tots.reduce((a,b) => a+b, 0);
-  let cum = 0;
-  const cumPct = tots.map(v => { cum += v; return +(cum/total*100).toFixed(1); });
-
-  destroyChart('chPareto');
-  charts['chPareto'] = new Chart(document.getElementById('chPareto').getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: data.map(d => d.n),
-      datasets: [
-        {
-          type: 'bar', label: 'Servicios', data: tots,
-          backgroundColor: COLORS, borderRadius: 4, order: 2,
-          datalabels: { color: '#fff', font: { size: 9, weight: 'bold' }, anchor: 'center', align: 'center', formatter: v => v.toLocaleString('es-CO') }
-        },
-        {
-          type: 'line', label: '% Acum', data: cumPct,
-          borderColor: '#c0392b', borderWidth: 2.5,
-          pointBackgroundColor: '#c0392b', pointBorderColor: '#fff',
-          pointBorderWidth: 2, pointRadius: 4, tension: .3,
-          yAxisID: 'y2', order: 1,
-          datalabels: { color: '#c0392b', font: { size: 9, weight: 'bold' }, anchor: 'end', align: 'top', formatter: v => `${v}%` }
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        datalabels: {}
-      },
-      scales: {
-        x: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } } },
-        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#64748b', font: { size: 10 } }, beginAtZero: true },
-        y2: { position: 'right', min: 0, max: 100, grid: { display: false },
-          ticks: { color: '#c0392b', font: { size: 10 }, callback: v => v + '%' } }
-      },
-      layout: { padding: { top: 20 } }
-    }
+  const data = agrupar('regional',20);
+  if(!data.length) return;
+  const tots=data.map(d=>d.v), total=tots.reduce((a,b)=>a+b,0);
+  let cum=0;
+  const cumPct=tots.map(v=>{cum+=v;return+(cum/total*100).toFixed(1);});
+  dc('chPareto');
+  charts['chPareto'] = new Chart(document.getElementById('chPareto').getContext('2d'),{
+    type:'bar',
+    data:{labels:data.map(d=>d.n), datasets:[
+      {type:'bar',label:'Servicios',data:tots,backgroundColor:COLORS,borderRadius:4,order:2,
+        datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'center',align:'center',formatter:v=>v.toLocaleString('es-CO')}},
+      {type:'line',label:'% Acum',data:cumPct,borderColor:'#c0392b',borderWidth:2.5,
+        pointBackgroundColor:'#c0392b',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:4,tension:.3,
+        yAxisID:'y2',order:1,
+        datalabels:{color:'#c0392b',font:{size:9,weight:'bold'},anchor:'end',align:'top',formatter:v=>`${v}%`}}
+    ]},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},datalabels:{}},
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}}},
+        y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}},beginAtZero:true},
+        y2:{position:'right',min:0,max:100,grid:{display:false},
+          ticks:{color:'#c0392b',font:{size:10},callback:v=>v+'%'}}},
+      layout:{padding:{top:20}}}
   });
 }
 
-// ── HELPER ────────────────────────────────────────────────────────
-function destroyChart(id) {
-  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+// ══════════════════════════════════════════════════════════════════
+// PÁGINA 2 — Costos en Proceso
+// ══════════════════════════════════════════════════════════════════
+function renderP2() {
+  const datos = FILTRADOS.filter(r => r.estado_seguimiento !== 'TERMINADO');
+
+  // KPIs
+  const rep  = datos.filter(r=>r.estado_seguimiento!=='NO REPARABLE').length;
+  const nr   = datos.filter(r=>r.estado_seguimiento==='NO REPARABLE').length;
+  const costos = datos.map(r=>Number(r.total)||0);
+  const ct   = costos.reduce((a,b)=>a+b,0);
+  const cp   = rep>0 ? ct/rep : 0;
+
+  document.getElementById('p2kRep').textContent = rep.toLocaleString('es-CO');
+  document.getElementById('p2kNR').textContent  = nr.toLocaleString('es-CO');
+  document.getElementById('p2kCT').textContent  = fmtCOP(ct);
+  document.getElementById('p2kCP').textContent  = fmtCOP(cp);
+
+  renderP2Mes(datos);
+  renderP2Afect(datos);
+  renderP2Reg(datos);
+  renderP2Tabla(datos);
 }
 
-// ── INIT ──────────────────────────────────────────────────────────
-// cargarDatos se llama desde data.js al terminar de cargar
+function renderP2Mes(datos) {
+  const byAnioMes = {};
+  datos.forEach(r => {
+    const key = `${r.anio}-${String(r.mes).padStart(2,'0')}`;
+    byAnioMes[key] = (byAnioMes[key]||0)+1;
+  });
+  const anios = [...new Set(datos.map(r=>r.anio))].sort();
+  const datasets = anios.map((anio,i) => ({
+    label: String(anio),
+    data: Array.from({length:12},(_,m)=>byAnioMes[`${anio}-${String(m+1).padStart(2,'0')}`]||0),
+    borderColor:COLORS[i], backgroundColor:COLORS[i]+'20',
+    borderWidth:2.5, pointRadius:4, pointBackgroundColor:COLORS[i],
+    pointBorderColor:'#fff', pointBorderWidth:2, tension:.3, fill:true,
+    datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>0,
+      color:ctx=>ctx.dataset.borderColor, font:{size:9,weight:'bold'},
+      anchor:'end', align:'top', formatter:v=>v>0?v.toLocaleString('es-CO'):''}
+  }));
+  dc('chP2Mes');
+  charts['chP2Mes'] = new Chart(document.getElementById('chP2Mes').getContext('2d'),{
+    type:'line', data:{labels:MESES_NOM.slice(1), datasets},
+    options:{responsive:true, plugins:{legend:{display:false}, datalabels:{}},
+      scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}}},
+        y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#64748b',font:{size:10}},beginAtZero:true}},
+      layout:{padding:{top:20}}}
+  });
+  document.getElementById('legP2Mes').innerHTML = anios.map((a,i)=>
+    `<span><span class="cdot" style="background:${COLORS[i]}"></span>${a}</span>`).join('');
+}
+
+function renderP2Afect(datos) {
+  const grupos = {};
+  datos.forEach(r => {
+    if(r.estado_seguimiento==='NO REPARABLE') return;
+    const k = r.categoria||'?';
+    if(!grupos[k]) grupos[k]={sum:0,cnt:0};
+    grupos[k].sum += Number(r.total)||0;
+    grupos[k].cnt++;
+  });
+  const keys   = Object.keys(grupos).sort((a,b)=>grupos[b].sum/grupos[b].cnt - grupos[a].sum/grupos[a].cnt);
+  const labels = keys.map(k=>MAP_AF[k]||k);
+  const vals   = keys.map(k=>Math.round(grupos[k].sum/grupos[k].cnt));
+  const colors = keys.map(k=>COLS_AF[k]||'#999');
+
+  dc('chP2Afect');
+  charts['chP2Afect'] = new Chart(document.getElementById('chP2Afect').getContext('2d'),{
+    type:'bar', data:{labels, datasets:[{data:vals, backgroundColor:colors, borderRadius:6,
+      datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'center',align:'center',
+        formatter:v=>fmtCOP(v)}}]},
+    options:{responsive:true, indexAxis:'y',
+      plugins:{legend:{display:false}, datalabels:{}},
+      scales:{x:{ticks:{color:'#64748b',font:{size:9},callback:v=>fmtCOP(v)},grid:{color:'rgba(0,0,0,.04)'}},
+        y:{ticks:{color:'#64748b',font:{size:10}},grid:{display:false}}}}
+  });
+}
+
+function renderP2Reg(datos) {
+  const grupos = {};
+  datos.forEach(r => {
+    const k = r.regional||'Sin regional';
+    if(!grupos[k]) grupos[k]=0;
+    grupos[k] += Number(r.total)||0;
+  });
+  const sorted = Object.entries(grupos).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const labels = sorted.map(([k])=>k);
+  const vals   = sorted.map(([,v])=>Math.round(v));
+
+  dc('chP2Reg');
+  charts['chP2Reg'] = new Chart(document.getElementById('chP2Reg').getContext('2d'),{
+    type:'bar', data:{labels, datasets:[{data:vals, backgroundColor:COLORS, borderRadius:6,
+      datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'center',align:'center',
+        formatter:v=>fmtCOP(v)}}]},
+    options:{responsive:true,
+      plugins:{legend:{display:false}, datalabels:{}},
+      scales:{x:{ticks:{color:'#64748b',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'}},
+        y:{ticks:{color:'#64748b',font:{size:9},callback:v=>fmtCOP(v)},grid:{color:'rgba(0,0,0,.04)'},beginAtZero:true}},
+      layout:{padding:{top:20}}}
+  });
+}
+
+function renderP2Tabla(datos) {
+  const cli = {};
+  datos.forEach(r => {
+    const k = r.cliente||'Sin cliente';
+    if(!cli[k]) cli[k]={cnt:0,nr:0,sum:0};
+    cli[k].cnt++;
+    if(r.estado_seguimiento==='NO REPARABLE') cli[k].nr++;
+    cli[k].sum += Number(r.total)||0;
+  });
+  const rows = Object.entries(cli)
+    .sort((a,b)=>b[1].sum-a[1].sum)
+    .map(([k,v])=>`<tr>
+      <td>${k}</td>
+      <td class="num">${v.cnt.toLocaleString('es-CO')}</td>
+      <td class="cop">${fmtCOP(v.sum)}</td>
+      <td class="cop">${fmtCOP(v.cnt>0?v.sum/v.cnt:0)}</td>
+      <td class="num">${v.nr.toLocaleString('es-CO')}</td>
+    </tr>`).join('');
+  document.querySelector('#tbCli2 tbody').innerHTML = rows || '<tr><td colspan="5" style="text-align:center;color:var(--mut);padding:20px">Sin datos</td></tr>';
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function agrupar(campo, top=999) {
+  const c={};
+  FILTRADOS.forEach(r=>{if(r[campo])c[r[campo]]=(c[r[campo]]||0)+1;});
+  return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,top).map(([n,v])=>({n,v}));
+}
+function agruparAnio(top=999) {
+  const c={};
+  FILTRADOS.forEach(r=>{if(r.anio_vehiculo)c[r.anio_vehiculo]=(c[r.anio_vehiculo]||0)+1;});
+  return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,top).map(([n,v])=>({n,v}));
+}
+function renderHBars(id, data, color) {
+  const el=document.getElementById(id);
+  if(!data.length){el.innerHTML='<div class="no-data">Sin datos</div>';return;}
+  const max=data[0].v;
+  el.innerHTML=data.map(d=>`
+    <div class="hbar-item">
+      <div class="hbar-lbl" title="${d.n}">${d.n}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${(d.v/max*100).toFixed(1)}%;background:${color}"></div></div>
+      <div class="hbar-val">${d.v.toLocaleString('es-CO')}</div>
+    </div>`).join('');
+}
+function fmtCOP(n) {
+  if(n>=1000000) return '$'+(n/1000000).toFixed(1)+'M';
+  if(n>=1000)    return '$'+(n/1000).toFixed(0)+'K';
+  return '$'+Math.round(n).toLocaleString('es-CO');
+}
+function dc(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
 </script>
 <script src="data.js" onload="cargarDatos()" onerror="document.getElementById('loading').innerHTML='<p style=color:#e8334a>❌ Error: no se pudo cargar data.js</p>'"></script>
 </body>
